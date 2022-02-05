@@ -44,11 +44,7 @@ const getHashedPassword = (password) => {
     const hash = sha256.update(password).digest('base64');
     return hash;
 }
-router.get('/getapk', async(req, res) => {
-	if (!req.query.url) return res.json({ code: 403, status: false, msg: 'Please input query: url' })
-         
-	apk(req.query.url).then(respon => res.json(respon[0])).catch(err => res.json(err))
-})
+
 app.post('/user/register', async(req, res) => {
 	if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) return res.render('register', { message: "Please select the captcha!", messageClass: 'red' })
 	var secretKey = process.env.google_ReCaptcha
@@ -222,7 +218,7 @@ app.post('/user/logout', (req, res) => {
 
 //     ----- API ROUTE -----     //
 app.use(apiLimiter)
-app.use('/api/xnxx/search', require('./router/xnxx-search'))
+app.use('/api/getapk', require('./router/xnxx-search'))
 app.use('/api/xnxx/detail', require('./router/xnxx-detail'))
 
 //     ----- HANDLE ERROR -----      //
