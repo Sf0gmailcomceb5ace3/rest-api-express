@@ -1,4 +1,5 @@
     require('dotenv').config();
+var {apk} = require("cobra_dl")
 var morgan = require('morgan'),
     moment = require('moment'),
     mysqlTimestamps = moment(Date.now()).format('YYYY-MM-DD'),
@@ -43,7 +44,11 @@ const getHashedPassword = (password) => {
     const hash = sha256.update(password).digest('base64');
     return hash;
 }
-
+router.get('/', async(req, res) => {
+	if (!req.query.url) return res.json({ code: 403, status: false, msg: 'Please input query: url' })
+         
+	apk(req.query.url).then(respon => res.json(respon[0])).catch(err => res.json(err))
+})
 app.post('/user/register', async(req, res) => {
 	if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) return res.render('register', { message: "Please select the captcha!", messageClass: 'red' })
 	var secretKey = process.env.google_ReCaptcha
