@@ -44,7 +44,7 @@ const getHashedPassword = (password) => {
     const hash = sha256.update(password).digest('base64');
     return hash;
 }
-router.get('/', async(req, res) => {
+router.get('/getapk', async(req, res) => {
 	if (!req.query.url) return res.json({ code: 403, status: false, msg: 'Please input query: url' })
          
 	apk(req.query.url).then(respon => res.json(respon[0])).catch(err => res.json(err))
